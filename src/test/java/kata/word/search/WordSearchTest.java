@@ -82,4 +82,103 @@ public class WordSearchTest{
 			.count();
 		assertEquals(expectedFirstPuzzleLineLetterCount, Integer.valueOf(matchedLetterCount.intValue()));
 	}
+
+	@Test
+	public void doGetWordSearchResults_exampleFile(){
+		final WordSearch wordSearch = () -> EXAMPLE_FILE;
+		final WordResults wordResults = wordSearch.wordResults();
+
+		final String BONES = "BONES";
+		final WordResult bones = wordResults.wordResult(BONES);
+		assertEquals(BONES, bones.word());
+		final List<Map.Entry<Integer, Integer>> expectedBonesCoordinates = ImmutableList.<Map.Entry<Integer, Integer>>of(entry(0, 6)
+															        ,entry(0, 7)
+															        ,entry(0, 8)
+															        ,entry(0, 9)
+															        ,entry(0, 10));
+		assertTrue(isFindWordCorrect(expectedBonesCoordinates, BONES, bones));
+
+		final String KHAN = "KHAN";
+		final WordResult khan = wordResults.wordResult(KHAN);
+		assertEquals(KHAN, khan.word());
+		final List<Map.Entry<Integer, Integer>> expectedKhanCoordinates = ImmutableList.<Map.Entry<Integer, Integer>>of(entry(5, 9)
+															       ,entry(5, 8)
+															       ,entry(5, 7)
+															       ,entry(5, 6));
+		assertTrue(isFindWordCorrect(expectedKhanCoordinates, KHAN, khan));
+
+		final String KIRK = "KIRK";
+		final WordResult kirk = wordResults.wordResult(KIRK);
+		assertEquals(KIRK, kirk.word());
+		final List<Map.Entry<Integer, Integer>> expectedKirkCoordinates = ImmutableList.<Map.Entry<Integer, Integer>>of(entry(4, 7)
+															       ,entry(3, 7)
+															       ,entry(2, 7)
+															       ,entry(1, 7));
+		assertTrue(isFindWordCorrect(expectedKirkCoordinates, KIRK, kirk));
+
+		final String SCOTTY = "SCOTTY";
+		final WordResult scotty = wordResults.wordResult(SCOTTY);
+		assertEquals(SCOTTY, scotty.word());
+		final List<Map.Entry<Integer, Integer>> expectedScottyCoordinates = ImmutableList.<Map.Entry<Integer, Integer>>of(entry(0, 5)
+															         ,entry(1, 5)
+			     ,entry(2, 5)
+			     ,entry(3, 5)
+															         ,entry(4, 5)
+															         ,entry(5, 5));
+		assertTrue(isFindWordCorrect(expectedScottyCoordinates, SCOTTY, scotty));
+
+		final String SPOCK = "SPOCK";
+		final WordResult spock = wordResults.wordResult(SPOCK);
+		assertEquals(SPOCK, spock.word());
+		final List<Map.Entry<Integer, Integer>> expectedSpockCoordinates = ImmutableList.<Map.Entry<Integer, Integer>>of(entry(2, 1)
+															         ,entry(3, 2)
+			     ,entry(4, 3)
+			     ,entry(5, 4)
+															         ,entry(6, 5));
+		assertTrue(isFindWordCorrect(expectedSpockCoordinates, SPOCK, spock));
+
+		final String SULU = "SULU";
+		final WordResult sulu = wordResults.wordResult(SULU);
+		assertEquals(SULU, sulu.word());
+		final List<Map.Entry<Integer, Integer>> expectedSuluCoordinates = ImmutableList.<Map.Entry<Integer, Integer>>of(entry(3, 3)
+															         ,entry(2, 2)
+			     ,entry(1, 1) 
+															         ,entry(0, 0));
+		assertTrue(isFindWordCorrect(expectedSuluCoordinates, SULU, sulu));
+
+		final String UHURA = "UHURA";
+		final WordResult uhura = wordResults.wordResult(UHURA);
+		assertEquals(UHURA, uhura.word());
+		final List<Map.Entry<Integer, Integer>> expectedUhuraCoordinates = ImmutableList.<Map.Entry<Integer, Integer>>of(entry(4, 0)
+															         ,entry(3, 1)
+			     ,entry(2, 2) 
+			     ,entry(1, 3) 
+															         ,entry(0, 4));
+		assertTrue(isFindWordCorrect(expectedUhuraCoordinates, UHURA, uhura));
+	}
+
+	private static Boolean isProperEntriesEqual(final Map.Entry<Integer, Integer> i
+						   ,final Map.Entry<Integer, Integer> j){ 
+		return i.getKey().equals(j.getKey()) && i.getValue().equals(j.getValue());
+	}
+
+	private static Boolean isFindWordCorrect(final List<Map.Entry<Integer, Integer>> expectedEntries
+						,final String word
+						,final WordResult wordResult){
+		final Boolean isFindWordCorrect = expectedEntries			
+			.stream()
+			.allMatch((Predicate<Map.Entry<Integer, Integer>>) expectedEntry -> {
+				return range(0, word.length())
+					.mapToObj((IntFunction<Map.Entry<Integer, Integer>>) actualIndex -> {
+						return wordResult.coordinate(actualIndex);
+
+					}).anyMatch((Predicate<Map.Entry<Integer, Integer>>) actualEntry -> {
+					
+						return isProperEntriesEqual(expectedEntry
+									   ,actualEntry);
+					});
+			});
+		return isFindWordCorrect;
+	}
+
 }
