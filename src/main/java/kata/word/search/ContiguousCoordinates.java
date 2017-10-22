@@ -24,71 +24,6 @@ import static kata.word.search.PuzzleLines.*;
 
 public interface ContiguousCoordinates{
 
-	public static enum Direction{
-		DOWN(entry -> {
-			return coordinateAddend -> {
-				final Integer newYCoordinate = entry.getValue().getValue() + coordinateAddend;
-				return entry(coordinateAddend, entry(entry.getValue().getKey(), newYCoordinate));
-			};
-		}) 
-		,UP(entry -> {
-			return coordinateAddend -> {
-				final Integer newYCoordinate = entry.getValue().getValue() - coordinateAddend;
-				return entry(coordinateAddend, entry(entry.getValue().getKey(), newYCoordinate));
-			};
-		})
-		,LEFT(entry -> {
-			return coordinateAddend -> {
-				final Integer newXCoordinate = entry.getValue().getKey() - coordinateAddend;
-				return entry(coordinateAddend, entry(newXCoordinate, entry.getValue().getValue()));
-			};
-		})
-		,RIGHT(entry -> {
-			return coordinateAddend -> {
-				final Integer newXCoordinate = entry.getValue().getKey() + coordinateAddend;
-				return entry(coordinateAddend, entry(newXCoordinate, entry.getValue().getValue()));
-			};
-		})
-		,DOWN_RIGHT(entry -> {
-			return coordinateAddend -> {
-				final Integer newXCoordinate = entry.getValue().getKey() + coordinateAddend;
-				final Integer newYCoordinate = entry.getValue().getValue() + coordinateAddend;
-				return entry(coordinateAddend, entry(newXCoordinate, newYCoordinate));
-			};
-		})
-		,UP_LEFT(entry -> {
-			return coordinateAddend -> {
-				final Integer newXCoordinate = entry.getValue().getKey() - coordinateAddend;
-				final Integer newYCoordinate = entry.getValue().getValue() - coordinateAddend;
-				return entry(coordinateAddend, entry(newXCoordinate, newYCoordinate));
-			};
-		})
-		,DOWN_LEFT(entry -> {
-			return coordinateAddend -> {
-				final Integer newXCoordinate = entry.getValue().getKey() - coordinateAddend;
-				final Integer newYCoordinate = entry.getValue().getValue() + coordinateAddend;
-				return entry(coordinateAddend, entry(newXCoordinate, newYCoordinate));
-			};
-		})
-		,UP_RIGHT(entry -> {
-			return coordinateAddend -> {
-				final Integer newXCoordinate = entry.getValue().getKey() + coordinateAddend;
-				final Integer newYCoordinate = entry.getValue().getValue() - coordinateAddend;
-				return entry(coordinateAddend, entry(newXCoordinate, newYCoordinate));
-			};
-		});
-
-		private Function<Map.Entry<Integer, Map.Entry<Integer, Integer>>, IntFunction<Map.Entry<Integer, Map.Entry<Integer, Integer>>>> function;
-
-		private Direction(final Function<Map.Entry<Integer, Map.Entry<Integer, Integer>>, IntFunction<Map.Entry<Integer, Map.Entry<Integer, Integer>>>> function){
-			this.function = function;
-		}
-
-		public Function<Map.Entry<Integer, Map.Entry<Integer, Integer>>, IntFunction<Map.Entry<Integer, Map.Entry<Integer, Integer>>>> function(){
-			return this.function;
-		}
-	}
-
 	public static IntFunction<Map.Entry<Integer, Map.Entry<Integer, Integer>>> toExpectedCoordinate(final Map.Entry<Integer, Map.Entry<Integer, Integer>> entry
 												       ,final Direction direction){
 		return direction
@@ -129,7 +64,6 @@ public interface ContiguousCoordinates{
 			return optionalEntries.get();
 		};
 		final Function<Map.Entry<Integer, Map.Entry<Integer, Integer>>, Optional<List<Map.Entry<Integer, Map.Entry<Integer, Integer>>>>> toExpectedCoordinates = entry -> {
-			//System.out.println(entry.getKey() + ", " + entry.getValue().getKey() + ", " + entry.getValue().getValue());
 			final List<Map.Entry<Integer, Map.Entry<Integer, Integer>>> expectedCoordinates = range(0, wordToFind.length())
 				.mapToObj(toExpectedCoordinate(entry, direction))
 				.collect(toList());
@@ -139,10 +73,8 @@ public interface ContiguousCoordinates{
 			if(!isAllCoordinatesPositive){
 				return Optional.empty();
 			}
-			//expectedCoordinates.stream().forEach(i -> System.out.println(i.getKey() + ", " + i.getValue().getKey() + ", " + i.getValue().getValue()));
 			return Optional.ofNullable(expectedCoordinates);
 		};
-		//letterCoordinates.stream().forEach(i -> System.out.println(i.getKey() + ", " + i.getValue().getKey() + ", " + i.getValue().getValue()));
 		final Predicate<List<Map.Entry<Integer, Map.Entry<Integer, Integer>>>> whereActualCoordinatesContainExpectedCoordinates = expectedCoordinates -> {
 			return expectedCoordinates	
 				.stream()

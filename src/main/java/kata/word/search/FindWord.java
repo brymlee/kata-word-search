@@ -20,13 +20,12 @@ import static com.google.common.base.Preconditions.*;
 import static com.google.common.base.Predicates.*;
 import static java.util.stream.IntStream.*;
 import static kata.word.search.PuzzleLines.*;
-import static kata.word.search.ContiguousCoordinates.Direction.*;
 
 @FunctionalInterface
 public interface FindWord{
 	public ImmutableMap<String, Object> findWordDownParameters();
 
-	public default List<List<Map.Entry<Integer, Integer>>> coordinates(final ContiguousCoordinates.Direction direction){
+	public default List<List<Map.Entry<Integer, Integer>>> coordinates(final Direction direction){
 		final File file = (File) findWordDownParameters().get("file");
 		checkState(notNull().apply(file), "file must not be null");
 		final String wordToFind = ((String) findWordDownParameters().get("wordToFind")).toUpperCase();
@@ -54,9 +53,5 @@ public interface FindWord{
 															,"wordToFind", wordToFind);
 		final List<List<Map.Entry<Integer, Integer>>> filteredCoordinates = ((ContiguousCoordinates) () -> contiguousCoordinatesDownParameters).coordinates(); 
 		return filteredCoordinates;
-	}
-
-	public default List<List<Map.Entry<Integer, Integer>>> coordinates(){
-		return coordinates(DOWN);
 	}
 }

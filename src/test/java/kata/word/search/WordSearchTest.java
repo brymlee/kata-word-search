@@ -93,7 +93,7 @@ public class WordSearchTest{
 				       ,entry(0, 9)
 				       ,entry(0, 10));
 		final List<Map.Entry<Integer, Integer>> actualBonesDownCoordinates = findBonesDown
-			.coordinates(ContiguousCoordinates.Direction.DOWN)
+			.coordinates(Direction.DOWN)
 			.get(0);
 		final Integer expectedBonesDownCoordinatesSize = expectedBonesDownCoordinates.size();
 		checkState(expectedBonesDownCoordinatesSize.equals(actualBonesDownCoordinates.size()), "Count of found word's coordinates must be equal from actual to expected.");
@@ -112,7 +112,7 @@ public class WordSearchTest{
 				       ,entry(5, 7)
 				       ,entry(5, 6));
 		final List<Map.Entry<Integer, Integer>> actualKhanUpCoordinates = findKhanUp
-			.coordinates(ContiguousCoordinates.Direction.UP)
+			.coordinates(Direction.UP)
 			.get(0);
 		final Integer expectedKhanUpCoordinatesSize = expectedKhanUpCoordinates.size();
 		checkState(expectedKhanUpCoordinatesSize.equals(actualKhanUpCoordinates.size()), "Count of found word's coordinates must be equal from actual to expected.");
@@ -131,7 +131,7 @@ public class WordSearchTest{
 				       ,entry(2, 7)
 				       ,entry(1, 7));
 		final List<Map.Entry<Integer, Integer>> actualCoordinates = findWord
-			.coordinates(ContiguousCoordinates.Direction.LEFT)
+			.coordinates(Direction.LEFT)
 			.get(0);
 		final Integer expectedCoordinatesSize = expectedCoordinates.size();
 		checkState(expectedCoordinatesSize.equals(actualCoordinates.size()), "Count of found word's coordinates must be equal from actual to expected.");
@@ -152,7 +152,7 @@ public class WordSearchTest{
 			        ,entry(4, 5)
 			        ,entry(5, 5));
 		final List<Map.Entry<Integer, Integer>> actualCoordinates = findWord
-			.coordinates(ContiguousCoordinates.Direction.RIGHT)
+			.coordinates(Direction.RIGHT)
 			.get(0);
 		final Integer expectedCoordinatesSize = expectedCoordinates.size();
 		checkState(expectedCoordinatesSize.equals(actualCoordinates.size()), "Count of found word's coordinates must be equal from actual to expected.");
@@ -172,7 +172,7 @@ public class WordSearchTest{
 			        ,entry(5, 4)
 			        ,entry(6, 5));
 		final List<Map.Entry<Integer, Integer>> actualCoordinates = findWord
-			.coordinates(ContiguousCoordinates.Direction.DOWN_RIGHT)
+			.coordinates(Direction.DOWN_RIGHT)
 			.get(0);
 		final Integer expectedCoordinatesSize = expectedCoordinates.size();
 		checkState(expectedCoordinatesSize.equals(actualCoordinates.size()), "Count of found word's coordinates must be equal from actual to expected.");
@@ -191,7 +191,7 @@ public class WordSearchTest{
 			        ,entry(1, 1)
 			        ,entry(0, 0));
 		final List<Map.Entry<Integer, Integer>> actualCoordinates = findWord
-			.coordinates(ContiguousCoordinates.Direction.UP_LEFT)
+			.coordinates(Direction.UP_LEFT)
 			.get(0);
 		final Integer expectedCoordinatesSize = expectedCoordinates.size();
 		checkState(expectedCoordinatesSize.equals(actualCoordinates.size()), "Count of found word's coordinates must be equal from actual to expected.");
@@ -211,7 +211,7 @@ public class WordSearchTest{
 				,entry(1, 3)
 			        ,entry(0, 4));
 		final List<Map.Entry<Integer, Integer>> actualCoordinates = findWord
-			.coordinates(ContiguousCoordinates.Direction.DOWN_LEFT)
+			.coordinates(Direction.DOWN_LEFT)
 			.get(0);
 		final Integer expectedCoordinatesSize = expectedCoordinates.size();
 		checkState(expectedCoordinatesSize.equals(actualCoordinates.size()), "Count of found word's coordinates must be equal from actual to expected.");
