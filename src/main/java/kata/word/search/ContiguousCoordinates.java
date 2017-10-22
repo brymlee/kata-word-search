@@ -33,7 +33,6 @@ public interface ContiguousCoordinates{
 
 	public static Predicate<Map.Entry<Integer, Map.Entry<Integer, Integer>>> whereCoordinatesEqual(final Map.Entry<Integer, Map.Entry<Integer, Integer>> i){
 		return (Predicate<Map.Entry<Integer, Map.Entry<Integer, Integer>>>) j -> 
-			//&& i.getKey().equals(j.getKey())
 			i.getValue().getKey().equals(j.getValue().getKey())
 			&& i.getValue().getValue().equals(j.getValue().getValue());
 	}

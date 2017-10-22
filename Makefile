@@ -15,3 +15,4 @@ run:
 
 test:
 	java -cp "${CLASSPATH}" org.junit.runner.JUnitCore kata.word.search.WordSearchTest
+	java -cp "${CLASSPATH}" org.junit.runner.JUnitCore kata.word.search.FindWordTest
