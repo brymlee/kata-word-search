@@ -2,14 +2,25 @@ package kata.word.search;
 
 import org.junit.Test;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import java.io.IOException;
 import java.io.File;
 import java.util.List;
+import java.util.Map;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.IntPredicate;
+import java.util.function.Predicate;
+import java.util.function.IntFunction;
 
 import static java.util.stream.Collectors.*;
 import static org.junit.Assert.*;
 import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Predicates.*;
 import static java.util.stream.IntStream.*;
+import static kata.word.search.PuzzleLines.*;
 
 public class WordSearchTest{
 
@@ -69,5 +80,41 @@ public class WordSearchTest{
 			.filter(letterIndex -> actualPuzzleLines.get(0).get(letterIndex).equals(expectedFirstPuzzleLine.get(letterIndex)))
 			.count();
 		assertEquals(expectedFirstPuzzleLineLetterCount, Integer.valueOf(matchedLetterCount.intValue()));
+	}
+
+	@Test
+	public void findWordDown_bones(){
+		final ImmutableMap<String, Object> findBonesDownParameters = ImmutableMap.<String, Object>of("file", EXAMPLE_FILE, "wordToFind", "bones");
+		final FindWordDown findBonesDown = () -> findBonesDownParameters; 
+		final ImmutableList<Map.Entry<Integer, Integer>> expectedBonesDownCoordinates = ImmutableList.<Map.Entry<Integer, Integer>>of(entry(0, 6)
+				       ,entry(0, 7)
+				       ,entry(0, 8)
+				       ,entry(0, 9)
+				       ,entry(0, 10));
+		final List<Map.Entry<Integer, Integer>> actualBonesDownCoordinates = findBonesDown
+			.coordinates()
+			.get(0);
+		final Integer expectedBonesDownCoordinatesSize = expectedBonesDownCoordinates.size();
+		checkState(expectedBonesDownCoordinatesSize.equals(actualBonesDownCoordinates.size()), "Count of found word's coordinates must be equal from actual to expected.");
+		final Long matchedDownCoordinateCount = range(0, expectedBonesDownCoordinates.size())
+			.filter(whereCoordinatesEqual(actualBonesDownCoordinates, expectedBonesDownCoordinates))
+			.count();
+		assertEquals(expectedBonesDownCoordinatesSize, Integer.valueOf(matchedDownCoordinateCount.intValue()));
+	}
+
+	private static IntPredicate whereCoordinatesEqual(final List<Map.Entry<Integer, Integer>> actualCoordinates
+						         ,final List<Map.Entry<Integer, Integer>> expectedCoordinates){
+		return coordinateIndex -> expectedCoordinates
+			.get(coordinateIndex)
+				.getKey()
+			.equals(actualCoordinates
+				.get(coordinateIndex)
+				.getKey()) 
+			&& expectedCoordinates
+				.get(coordinateIndex)
+				.getValue()
+			.equals(actualCoordinates
+				.get(coordinateIndex)
+				.getValue());
 	}
 }
