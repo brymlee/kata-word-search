@@ -8,6 +8,7 @@ import com.google.common.collect.ImmutableMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.IntFunction;
+import java.util.Optional;
 
 import static com.google.common.base.Preconditions.*;
 import static java.util.stream.Collectors.*;
@@ -40,7 +41,7 @@ public interface PuzzleLines{
 	}
 
 	public default ImmutableList.Builder<Map.Entry<Integer, Map.Entry<Integer, Integer>>> coordinatesOfWord(final Integer lineIndex
-													       ,final Map<String, Integer> wordLetterMap
+													       ,final List<Map.Entry<String, Integer>> wordLetterSequence
 													       ,final String wordToFind){
 		final List<String> lineSplit = lineSplit();
 		final String line = lineSplit.get(lineIndex);
@@ -48,15 +49,18 @@ public interface PuzzleLines{
 			new ImmutableList.Builder<Map.Entry<Integer, Map.Entry<Integer, Integer>>>().add(entry);
 		final IntFunction<Map.Entry<Integer, Map.Entry<Integer, Integer>>> toEntry = letterIndex -> {
 			final String letter = letterSplit(line).get(letterIndex); 
-			final Integer wordLetterIndex = wordLetterMap.get(letter);
-			final Integer xCoordinate = notNull().apply(wordLetterIndex) 
+			final Optional<Map.Entry<String, Integer>> optionalWordLetter = wordLetterSequence
+				.stream()
+				.filter((Predicate<Map.Entry<String, Integer>>) entry -> entry.getKey().equals(letter))
+				.findFirst();
+			final Integer xCoordinate = optionalWordLetter.isPresent()  
 				? letterIndex
 				: -1;
-			final Integer yCoordinate = notNull().apply(wordLetterIndex)
+			final Integer yCoordinate = optionalWordLetter.isPresent() 
 				? lineIndex
 				: -1;
-			final Map.Entry<Integer, Map.Entry<Integer, Integer>> entry = entry(notNull().apply(wordLetterIndex) 
-				? wordLetterIndex 
+			final Map.Entry<Integer, Map.Entry<Integer, Integer>> entry = entry(optionalWordLetter.isPresent()
+				? optionalWordLetter.get().getValue() 
 				: -1, entry(xCoordinate, yCoordinate));
 			return entry;
 		};

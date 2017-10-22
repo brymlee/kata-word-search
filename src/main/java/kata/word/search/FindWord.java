@@ -23,7 +23,7 @@ import static kata.word.search.PuzzleLines.*;
 import static kata.word.search.ContiguousCoordinates.Direction.*;
 
 @FunctionalInterface
-public interface FindWordDown{
+public interface FindWord{
 	public ImmutableMap<String, Object> findWordDownParameters();
 
 	public default List<List<Map.Entry<Integer, Integer>>> coordinates(final ContiguousCoordinates.Direction direction){
@@ -37,17 +37,12 @@ public interface FindWordDown{
 			.mapToObj(index -> new Character(characters[index]))
 			.map(character -> String.valueOf(character))
 			.collect(toList());
-		final Optional<ImmutableMap.Builder<String, Integer>> optionalWordLetterMap = range(0, wordToFind.length())
-			.mapToObj(wordLetterIndex -> entry(wordLetterSplit.get(wordLetterIndex), wordLetterIndex))
-			.map(entry -> (ImmutableMap.Builder<String, Integer>) ImmutableMap.<String, Integer>builder()
-				.put(entry))
-			.reduce((BinaryOperator<ImmutableMap.Builder<String, Integer>>) (i, j) -> ImmutableMap.<String, Integer>builder()
-				.putAll(i.build())
-				.putAll(j.build()));	
-		final Map<String, Integer> wordLetterMap = optionalWordLetterMap.get().build();
+		final List<Map.Entry<String, Integer>> wordLetterSequence = range(0, wordToFind.length())
+			.mapToObj((IntFunction<Map.Entry<String, Integer>>) wordLetterIndex -> entry(wordLetterSplit.get(wordLetterIndex), wordLetterIndex))
+			.collect(toList());
 		final List<String> lineSplit = puzzleLines.lineSplit();
 		final List<Map.Entry<Integer, Map.Entry<Integer, Integer>>> letterCoordinates = range(0, lineSplit.size())
-			.mapToObj(lineIndex -> puzzleLines.coordinatesOfWord(lineIndex, wordLetterMap, wordToFind))
+			.mapToObj(lineIndex -> puzzleLines.coordinatesOfWord(lineIndex, wordLetterSequence, wordToFind))
 			.reduce((i, j) -> {
 				return ImmutableList.<Map.Entry<Integer, Map.Entry<Integer, Integer>>>builder()
 					.addAll(i.build())

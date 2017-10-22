@@ -13,6 +13,7 @@ import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.IntFunction;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.*;
 import static org.junit.Assert.*;
@@ -35,7 +36,13 @@ public interface ContiguousCoordinates{
 				final Integer newYCoordinate = entry.getValue().getValue() - coordinateAddend;
 				return entry(coordinateAddend, entry(entry.getValue().getKey(), newYCoordinate));
 			};
-		}); 
+		})
+		,LEFT(entry -> {
+			return coordinateAddend -> {
+				final Integer newXCoordinate = entry.getValue().getKey() - coordinateAddend;
+				return entry(coordinateAddend, entry(newXCoordinate, entry.getValue().getValue()));
+			};
+		});
 
 		private Function<Map.Entry<Integer, Map.Entry<Integer, Integer>>, IntFunction<Map.Entry<Integer, Map.Entry<Integer, Integer>>>> function;
 
@@ -56,8 +63,9 @@ public interface ContiguousCoordinates{
 	}
 
 	public static Predicate<Map.Entry<Integer, Map.Entry<Integer, Integer>>> whereCoordinatesEqual(final Map.Entry<Integer, Map.Entry<Integer, Integer>> i){
-		return (Predicate<Map.Entry<Integer, Map.Entry<Integer, Integer>>>) j -> i.getKey().equals(j.getKey())
-			&& i.getValue().getKey().equals(j.getValue().getKey())
+		return (Predicate<Map.Entry<Integer, Map.Entry<Integer, Integer>>>) j -> 
+			//&& i.getKey().equals(j.getKey())
+			i.getValue().getKey().equals(j.getValue().getKey())
 			&& i.getValue().getValue().equals(j.getValue().getValue());
 	}
 
@@ -71,19 +79,41 @@ public interface ContiguousCoordinates{
 		final String wordToFind = (String) contiguousCoordinatesParameters().get("wordToFind");
 		checkState(notNull().apply(wordToFind), "wordToFind must be specified");
 		final Predicate<Map.Entry<Integer, Map.Entry<Integer, Integer>>> whereCoordinatesHaveWordLetters = entry -> !Integer.valueOf(-1).equals(entry.getKey()); 
+		final Predicate<Map.Entry<Integer, Map.Entry<Integer, Integer>>> whereCoordinatesArePositive = entry -> {
+			final boolean isKeyPositive = 0 <= entry.getKey();
+			final boolean isXPositive = 0 <= entry.getValue().getKey();
+			final boolean isYPositive = 0 <= entry.getValue().getValue();
+			return isKeyPositive && isXPositive && isYPositive;
+		};
 		final Predicate<Map.Entry<Integer, Map.Entry<Integer, Integer>>> whereCoordinatesAreStartingWordLetter = entry -> { 
 			return Integer.valueOf(0).equals(entry.getKey());
 		};
-		final Function<Map.Entry<Integer, Map.Entry<Integer, Integer>>, List<Map.Entry<Integer, Map.Entry<Integer, Integer>>>> toExpectedCoordinates = entry -> {
+		final Predicate<Optional<List<Map.Entry<Integer, Map.Entry<Integer, Integer>>>>> isPresent = optionalEntries -> {
+			return optionalEntries.isPresent();
+		};
+		final Function<Optional<List<Map.Entry<Integer, Map.Entry<Integer, Integer>>>>, List<Map.Entry<Integer, Map.Entry<Integer, Integer>>>> unwrapOptional = optionalEntries -> {
+			return optionalEntries.get();
+		};
+		final Function<Map.Entry<Integer, Map.Entry<Integer, Integer>>, Optional<List<Map.Entry<Integer, Map.Entry<Integer, Integer>>>>> toExpectedCoordinates = entry -> {
+			//System.out.println(entry.getKey() + ", " + entry.getValue().getKey() + ", " + entry.getValue().getValue());
 			final List<Map.Entry<Integer, Map.Entry<Integer, Integer>>> expectedCoordinates = range(0, wordToFind.length())
 				.mapToObj(toExpectedCoordinate(entry, direction))
 				.collect(toList());
-			return expectedCoordinates;
+			final Boolean isAllCoordinatesPositive = expectedCoordinates
+				.stream()
+				.allMatch(whereCoordinatesArePositive);
+			if(!isAllCoordinatesPositive){
+				return Optional.empty();
+			}
+			//expectedCoordinates.stream().forEach(i -> System.out.println(i.getKey() + ", " + i.getValue().getKey() + ", " + i.getValue().getValue()));
+			return Optional.ofNullable(expectedCoordinates);
 		};
+		//letterCoordinates.stream().forEach(i -> System.out.println(i.getKey() + ", " + i.getValue().getKey() + ", " + i.getValue().getValue()));
 		final Predicate<List<Map.Entry<Integer, Map.Entry<Integer, Integer>>>> whereActualCoordinatesContainExpectedCoordinates = expectedCoordinates -> {
 			return expectedCoordinates	
 				.stream()
 				.allMatch(expectedCoordinate -> {
+					
 					return letterCoordinates
 						.stream()
 						.anyMatch(whereCoordinatesEqual(expectedCoordinate));
@@ -103,6 +133,8 @@ public interface ContiguousCoordinates{
 			.filter(whereCoordinatesHaveWordLetters)
 			.filter(whereCoordinatesAreStartingWordLetter)
 			.map(toExpectedCoordinates)
+			.filter(isPresent)
+			.map(unwrapOptional)
 			.filter(whereActualCoordinatesContainExpectedCoordinates)
 			.map(toProperCoordinates)
 			.collect(toList());
