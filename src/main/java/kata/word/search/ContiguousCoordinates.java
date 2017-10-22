@@ -48,7 +48,15 @@ public interface ContiguousCoordinates{
 				final Integer newXCoordinate = entry.getValue().getKey() + coordinateAddend;
 				return entry(coordinateAddend, entry(newXCoordinate, entry.getValue().getValue()));
 			};
-		});
+		})
+		,DOWN_RIGHT(entry -> {
+			return coordinateAddend -> {
+				final Integer newXCoordinate = entry.getValue().getKey() + coordinateAddend;
+				final Integer newYCoordinate = entry.getValue().getValue() + coordinateAddend;
+				return entry(coordinateAddend, entry(newXCoordinate, newYCoordinate));
+			};
+		})
+;
 
 		private Function<Map.Entry<Integer, Map.Entry<Integer, Integer>>, IntFunction<Map.Entry<Integer, Map.Entry<Integer, Integer>>>> function;
 

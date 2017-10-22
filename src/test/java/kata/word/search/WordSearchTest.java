@@ -162,6 +162,26 @@ public class WordSearchTest{
 		assertEquals(expectedCoordinatesSize, Integer.valueOf(matchedUpCoordinateCount.intValue()));
 	}
 
+	@Test
+	public void findWordDiagonalRight_spock(){
+		final ImmutableMap<String, Object> findParameters = ImmutableMap.<String, Object>of("file", EXAMPLE_FILE, "wordToFind", "spock");
+		final FindWord findWord = () -> findParameters; 
+		final ImmutableList<Map.Entry<Integer, Integer>> expectedCoordinates = ImmutableList.<Map.Entry<Integer, Integer>>of(entry(2, 1)
+			        ,entry(3, 2)
+			        ,entry(4, 3)
+			        ,entry(5, 4)
+			        ,entry(6, 5));
+		final List<Map.Entry<Integer, Integer>> actualCoordinates = findWord
+			.coordinates(ContiguousCoordinates.Direction.DOWN_RIGHT)
+			.get(0);
+		final Integer expectedCoordinatesSize = expectedCoordinates.size();
+		checkState(expectedCoordinatesSize.equals(actualCoordinates.size()), "Count of found word's coordinates must be equal from actual to expected.");
+		final Long matchedUpCoordinateCount = range(0, expectedCoordinates.size())
+			.filter(whereCoordinatesEqual(actualCoordinates, expectedCoordinates))
+			.count();
+		assertEquals(expectedCoordinatesSize, Integer.valueOf(matchedUpCoordinateCount.intValue()));
+	}
+
 	private static IntPredicate whereCoordinatesEqual(final List<Map.Entry<Integer, Integer>> actualCoordinates
 						         ,final List<Map.Entry<Integer, Integer>> expectedCoordinates){
 		return coordinateIndex -> expectedCoordinates
