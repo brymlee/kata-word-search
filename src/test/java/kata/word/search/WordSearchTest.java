@@ -92,7 +92,7 @@ public class WordSearchTest{
 				       ,entry(0, 9)
 				       ,entry(0, 10));
 		final List<Map.Entry<Integer, Integer>> actualBonesDownCoordinates = findBonesDown
-			.coordinates()
+			.coordinates(ContiguousCoordinates.Direction.DOWN)
 			.get(0);
 		final Integer expectedBonesDownCoordinatesSize = expectedBonesDownCoordinates.size();
 		checkState(expectedBonesDownCoordinatesSize.equals(actualBonesDownCoordinates.size()), "Count of found word's coordinates must be equal from actual to expected.");
@@ -100,6 +100,25 @@ public class WordSearchTest{
 			.filter(whereCoordinatesEqual(actualBonesDownCoordinates, expectedBonesDownCoordinates))
 			.count();
 		assertEquals(expectedBonesDownCoordinatesSize, Integer.valueOf(matchedDownCoordinateCount.intValue()));
+	}
+
+	@Test
+	public void findWordUp_khan(){
+		final ImmutableMap<String, Object> findKhanUpParameters = ImmutableMap.<String, Object>of("file", EXAMPLE_FILE, "wordToFind", "khan");
+		final FindWordUp findKhanUp = () -> findKhanUpParameters; 
+		final ImmutableList<Map.Entry<Integer, Integer>> expectedKhanUpCoordinates = ImmutableList.<Map.Entry<Integer, Integer>>of(entry(5, 9)
+				       ,entry(5, 8)
+				       ,entry(5, 7)
+				       ,entry(5, 6));
+		final List<Map.Entry<Integer, Integer>> actualKhanUpCoordinates = findKhanUp
+			.coordinates(ContiguousCoordinates.Direction.UP)
+			.get(0);
+		final Integer expectedKhanUpCoordinatesSize = expectedKhanUpCoordinates.size();
+		checkState(expectedKhanUpCoordinatesSize.equals(actualKhanUpCoordinates.size()), "Count of found word's coordinates must be equal from actual to expected.");
+		final Long matchedUpCoordinateCount = range(0, expectedKhanUpCoordinates.size())
+			.filter(whereCoordinatesEqual(actualKhanUpCoordinates, expectedKhanUpCoordinates))
+			.count();
+		assertEquals(expectedKhanUpCoordinatesSize, Integer.valueOf(matchedUpCoordinateCount.intValue()));
 	}
 
 	private static IntPredicate whereCoordinatesEqual(final List<Map.Entry<Integer, Integer>> actualCoordinates

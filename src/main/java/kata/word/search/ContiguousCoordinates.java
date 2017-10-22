@@ -24,17 +24,35 @@ import static kata.word.search.PuzzleLines.*;
 public interface ContiguousCoordinates{
 
 	public static enum Direction{
-		DOWN;
-		/*private Direction(final IntFunction<> ){
+		DOWN(entry -> {
+			return coordinateAddend -> {
+				final Integer newYCoordinate = entry.getValue().getValue() + coordinateAddend;
+				return entry(coordinateAddend, entry(entry.getValue().getKey(), newYCoordinate));
+			};
+		}) 
+		,UP(entry -> {
+			return coordinateAddend -> {
+				final Integer newYCoordinate = entry.getValue().getValue() - coordinateAddend;
+				return entry(coordinateAddend, entry(entry.getValue().getKey(), newYCoordinate));
+			};
+		}); 
 
-		}*/
+		private Function<Map.Entry<Integer, Map.Entry<Integer, Integer>>, IntFunction<Map.Entry<Integer, Map.Entry<Integer, Integer>>>> function;
+
+		private Direction(final Function<Map.Entry<Integer, Map.Entry<Integer, Integer>>, IntFunction<Map.Entry<Integer, Map.Entry<Integer, Integer>>>> function){
+			this.function = function;
+		}
+
+		public Function<Map.Entry<Integer, Map.Entry<Integer, Integer>>, IntFunction<Map.Entry<Integer, Map.Entry<Integer, Integer>>>> function(){
+			return this.function;
+		}
 	}
 
-	public static IntFunction<Map.Entry<Integer, Map.Entry<Integer, Integer>>> toExpectedCoordinate(final Map.Entry<Integer, Map.Entry<Integer, Integer>> entry){
-		return coordinateAddend -> { 
-			final Integer newYCoordinate = entry.getValue().getValue() + coordinateAddend;
-			return entry(coordinateAddend, entry(entry.getValue().getKey(), newYCoordinate));
-		}; 
+	public static IntFunction<Map.Entry<Integer, Map.Entry<Integer, Integer>>> toExpectedCoordinate(final Map.Entry<Integer, Map.Entry<Integer, Integer>> entry
+												       ,final Direction direction){
+		return direction
+			.function()
+			.apply(entry);
 	}
 
 	public static Predicate<Map.Entry<Integer, Map.Entry<Integer, Integer>>> whereCoordinatesEqual(final Map.Entry<Integer, Map.Entry<Integer, Integer>> i){
@@ -58,7 +76,7 @@ public interface ContiguousCoordinates{
 		};
 		final Function<Map.Entry<Integer, Map.Entry<Integer, Integer>>, List<Map.Entry<Integer, Map.Entry<Integer, Integer>>>> toExpectedCoordinates = entry -> {
 			final List<Map.Entry<Integer, Map.Entry<Integer, Integer>>> expectedCoordinates = range(0, wordToFind.length())
-				.mapToObj(toExpectedCoordinate(entry))
+				.mapToObj(toExpectedCoordinate(entry, direction))
 				.collect(toList());
 			return expectedCoordinates;
 		};
