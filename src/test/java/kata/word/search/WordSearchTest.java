@@ -163,7 +163,7 @@ public class WordSearchTest{
 	}
 
 	@Test
-	public void findWordDiagonalRight_spock(){
+	public void findWordDownRight_spock(){
 		final ImmutableMap<String, Object> findParameters = ImmutableMap.<String, Object>of("file", EXAMPLE_FILE, "wordToFind", "spock");
 		final FindWord findWord = () -> findParameters; 
 		final ImmutableList<Map.Entry<Integer, Integer>> expectedCoordinates = ImmutableList.<Map.Entry<Integer, Integer>>of(entry(2, 1)
@@ -192,6 +192,26 @@ public class WordSearchTest{
 			        ,entry(0, 0));
 		final List<Map.Entry<Integer, Integer>> actualCoordinates = findWord
 			.coordinates(ContiguousCoordinates.Direction.UP_LEFT)
+			.get(0);
+		final Integer expectedCoordinatesSize = expectedCoordinates.size();
+		checkState(expectedCoordinatesSize.equals(actualCoordinates.size()), "Count of found word's coordinates must be equal from actual to expected.");
+		final Long matchedUpCoordinateCount = range(0, expectedCoordinates.size())
+			.filter(whereCoordinatesEqual(actualCoordinates, expectedCoordinates))
+			.count();
+		assertEquals(expectedCoordinatesSize, Integer.valueOf(matchedUpCoordinateCount.intValue()));
+	}
+
+	@Test
+	public void findWordDownLeft_uhura(){
+		final ImmutableMap<String, Object> findParameters = ImmutableMap.<String, Object>of("file", EXAMPLE_FILE, "wordToFind", "uhura");
+		final FindWord findWord = () -> findParameters; 
+		final ImmutableList<Map.Entry<Integer, Integer>> expectedCoordinates = ImmutableList.<Map.Entry<Integer, Integer>>of(entry(4, 0)
+			        ,entry(3, 1)
+			        ,entry(2, 2)
+				,entry(1, 3)
+			        ,entry(0, 4));
+		final List<Map.Entry<Integer, Integer>> actualCoordinates = findWord
+			.coordinates(ContiguousCoordinates.Direction.DOWN_LEFT)
 			.get(0);
 		final Integer expectedCoordinatesSize = expectedCoordinates.size();
 		checkState(expectedCoordinatesSize.equals(actualCoordinates.size()), "Count of found word's coordinates must be equal from actual to expected.");
