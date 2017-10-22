@@ -141,6 +141,27 @@ public class WordSearchTest{
 		assertEquals(expectedCoordinatesSize, Integer.valueOf(matchedUpCoordinateCount.intValue()));
 	}
 
+	@Test
+	public void findWordRight_scotty(){
+		final ImmutableMap<String, Object> findParameters = ImmutableMap.<String, Object>of("file", EXAMPLE_FILE, "wordToFind", "scotty");
+		final FindWord findWord = () -> findParameters; 
+		final ImmutableList<Map.Entry<Integer, Integer>> expectedCoordinates = ImmutableList.<Map.Entry<Integer, Integer>>of(entry(0, 5)
+			        ,entry(1, 5)
+			        ,entry(2, 5)
+			        ,entry(3, 5)
+			        ,entry(4, 5)
+			        ,entry(5, 5));
+		final List<Map.Entry<Integer, Integer>> actualCoordinates = findWord
+			.coordinates(ContiguousCoordinates.Direction.RIGHT)
+			.get(0);
+		final Integer expectedCoordinatesSize = expectedCoordinates.size();
+		checkState(expectedCoordinatesSize.equals(actualCoordinates.size()), "Count of found word's coordinates must be equal from actual to expected.");
+		final Long matchedUpCoordinateCount = range(0, expectedCoordinates.size())
+			.filter(whereCoordinatesEqual(actualCoordinates, expectedCoordinates))
+			.count();
+		assertEquals(expectedCoordinatesSize, Integer.valueOf(matchedUpCoordinateCount.intValue()));
+	}
+
 	private static IntPredicate whereCoordinatesEqual(final List<Map.Entry<Integer, Integer>> actualCoordinates
 						         ,final List<Map.Entry<Integer, Integer>> expectedCoordinates){
 		return coordinateIndex -> expectedCoordinates
