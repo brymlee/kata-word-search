@@ -24,20 +24,34 @@ import static java.util.stream.IntStream.*;
 import static kata.word.search.PuzzleLines.*;
 
 public class WordSearchView{
-
 	protected static final String EXAMPLE_FILE_NAME = "resources/exampleWordSearch.txt";
+	protected static final String EXAMPLE_FILE_2_NAME = "resources/example2WordSearch.txt";
+	protected static final String EXAMPLE_FILE_3_NAME = "resources/example3WordSearch.txt";
 	protected static final File EXAMPLE_FILE = new File(EXAMPLE_FILE_NAME);
-
+	protected static final File EXAMPLE_FILE_2 = new File(EXAMPLE_FILE_2_NAME);
+	protected static final File EXAMPLE_FILE_3 = new File(EXAMPLE_FILE_3_NAME);
 	protected static final File EXAMPLE_VIEW_FILE = new File("resources/exampleView.txt");
-
 	protected static final File TUPLE_VIEW_FILE = new File("resources/tupleView.txt");
 
+	private static File file(final String fileId){
+		switch(fileId){
+			case "A" : 
+				return EXAMPLE_FILE;
+			case "B" :
+				return EXAMPLE_FILE_2;
+			case "C" :
+				return EXAMPLE_FILE_3;
+		}
+		throw new RuntimeException("File ID not specified");
+	}
 
 	public static void main(final String[] arguments){
 		try{
-			final WordSearch wordSearch = () -> EXAMPLE_FILE;
+			final String fileId = arguments[0].trim();
+			final File file = file(fileId);
+			final WordSearch wordSearch = () -> file;
 			final WordResults wordResults = wordSearch.wordResults();
-			final SearchForLine searchForLine = () -> EXAMPLE_FILE;
+			final SearchForLine searchForLine = () -> file;
 			final List<String> words = Arrays.asList(searchForLine.firstLineSplit());
 			final String exampleViewString = ((SearchForLine) () -> EXAMPLE_VIEW_FILE)
 				.fileAsString();

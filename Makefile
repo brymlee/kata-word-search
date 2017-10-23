@@ -10,8 +10,14 @@ all:
 	javac -cp "${CLASSPATH}" ${SOURCE_MAIN}/${BASE_PACKAGE}/*.java 
 	javac -cp "${CLASSPATH}" ${SOURCE_TEST}/${BASE_PACKAGE}/*.java
 
-run:
-	java -cp "${CLASSPATH}" kata.word.search.WordSearchView
+runA:
+	java -cp "${CLASSPATH}" kata.word.search.WordSearchView A
+
+runB:
+	java -cp "${CLASSPATH}" kata.word.search.WordSearchView B
+
+runC:
+	java -cp "${CLASSPATH}" kata.word.search.WordSearchView C
 
 test:
 	java -cp "${CLASSPATH}" org.junit.runner.JUnitCore kata.word.search.WordSearchTest

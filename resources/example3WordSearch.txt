@@ -1,0 +1,9 @@
+FOOD,HELLO,JELLY,JUNGLE,PEACOCK
+F,X,M,C,R,E,A,T,F,L,R,K, 
+E,J,U,R,P,Y,N,M,M,Y,O,M, 
+L,L,J,N,O,L,E,U,J,S,H,Q, 
+Q,X,G,L,C,L,K,V,U,X,O,U, 
+Z,S,L,N,K,E,F,O,O,D,P,R, 
+F,E,G,M,U,J,H,Y,T,J,S,S, 
+H,Q,D,D,L,J,Q,W,D,Z,K,L, 
+K,C,O,C,A,E,P,X,K,E,J,T, 

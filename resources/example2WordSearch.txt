@@ -1,0 +1,11 @@
+BROWN,BUTTON,SOCK,USER,YELLOW
+N,O,T,T,U,B,N,J,K,U 
+U,S,E,R,R,Y,W,C,C,K 
+M,U,Z,Y,P,P,O,J,O,M 
+R,Y,R,E,Z,S,R,N,Y,P 
+E,L,W,T,T,L,B,X,V,K 
+A,R,D,O,S,J,B,C,S,G 
+E,U,A,M,L,F,S,D,M,J 
+U,O,N,Q,G,L,N,R,C,G 
+U,R,I,I,O,K,E,B,M,C 
+B,I,D,C,L,K,R,Y,O,H 
