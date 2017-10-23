@@ -23,6 +23,7 @@ import static com.google.common.base.Predicates.*;
 import static java.util.stream.IntStream.*;
 import static kata.word.search.PuzzleLines.*;
 import static kata.word.search.WordSearchTest.*;
+import static kata.word.search.WordSearchView.*;
 
 public class FindWordTest{
 	@Test

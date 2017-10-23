@@ -22,11 +22,9 @@ import static com.google.common.base.Preconditions.*;
 import static com.google.common.base.Predicates.*;
 import static java.util.stream.IntStream.*;
 import static kata.word.search.PuzzleLines.*;
+import static kata.word.search.WordSearchView.*;
 
 public class WordSearchTest{
-
-	protected static final String EXAMPLE_FILE_NAME = "resources/exampleWordSearch.txt";
-	protected static final File EXAMPLE_FILE = new File(EXAMPLE_FILE_NAME);
 
 	@Test
 	public void isHelloHello_sanityTest(){
